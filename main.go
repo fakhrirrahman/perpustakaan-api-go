@@ -1,6 +1,12 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"go-web-native/internal/config"
+	"go-web-native/internal/connection"
+	"go-web-native/internal/repository"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 func main() {
 	cnf := config.Get()

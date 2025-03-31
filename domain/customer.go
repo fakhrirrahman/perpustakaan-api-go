@@ -3,6 +3,7 @@ package domain
 import (
 	"context"
 	"database/sql"
+	"go-web-native/dto"
 )
 
 
@@ -25,4 +26,5 @@ type CustomerRepository interface {
 }
 
 type CustomerService interface {
-	Index(ctx context.Context) ()
+	Index(ctx context.Context) ([]dto.CustomerData, error)
+}
