@@ -1,9 +1,11 @@
 package main
 
 import (
+	"go-web-native/internal/api"
 	"go-web-native/internal/config"
 	"go-web-native/internal/connection"
 	"go-web-native/internal/repository"
+	"go-web-native/internal/service"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,7 +15,11 @@ func main() {
 	dbConnection := connection.GetDatabase(cnf.Database)
 	app := fiber.New()
 
-	CustomerRepository := repository.NewCustomerRepository(dbConnection)
+	customerRepository := repository.NewCustomerRepository(dbConnection)
+
+	customerService := service.NewCustomerService(customerRepository)
+
+	api.NewCustomerAPI(app, customerService)
 
 	app.Get("/developers", developers)
 

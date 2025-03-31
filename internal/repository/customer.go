@@ -20,7 +20,7 @@ func NewCustomerRepository(db *sql.DB) *CustomerRepository {
 }
 
 // FindByID retrieves a customer by ID from the database.
-func (cr CustomerRepository) FindByID(ctx context.Context, id string) (result []domain.Customer, err error) {
+func (cr CustomerRepository) FindByID(ctx context.Context, id string) (result domain.Customer, err error) {
 	dataset := cr.db.From("customers").Where(goqu.C("id").Eq(id)).Where(goqu.C("deleted_at").IsNull())
 	err = dataset.ScanStructsContext(ctx, &result)
 	return
