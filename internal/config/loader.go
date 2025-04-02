@@ -25,7 +25,7 @@ func Get() *Config {
 			Name: os.Getenv("DB_NAME"),
 			User: os.Getenv("DB_USER"),
 			Pass: os.Getenv("DB_PASS"),
-			Tz:   os.Getenv("DB_TZ"),
+			Tz:   os.Getenv("DB_Tz"),
 		},
 	}
 }

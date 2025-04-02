@@ -6,7 +6,6 @@ import (
 	"go-web-native/dto"
 )
 
-
 type Customer struct {
 	ID        string    `db:"id"`
 	Name      string `db:"name"`
@@ -27,4 +26,5 @@ type CustomerRepository interface {
 
 type CustomerService interface {
 	Index(ctx context.Context) ([]dto.CustomerData, error)
+	Created(ctx context.Context, req dto.CreateCustomerRequest) error
 }

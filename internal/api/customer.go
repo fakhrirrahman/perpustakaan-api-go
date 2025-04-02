@@ -14,19 +14,20 @@ type CustomerAPI struct {
 	CustomerService domain.CustomerService
 }
 
-func NewCustomerAPI(app *fiber.App, customerService domain.CustomerService) {
-	ca := &CustomerAPI{CustomerService: customerService}
-	app.Get("/customers", ca.Index) // Perbaikan: Dipindahkan ke dalam fungsi
+func NewCustomerAPI(app *fiber.App, customerService domain.CustomerService){
+	ca := CustomerAPI{
+		CustomerService: customerService,
+	}
+	app.Get("/customers", ca.Index)
 }
 
-func (ca *CustomerAPI) Index(ctx *fiber.Ctx) error {
-	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
+func (ca CustomerAPI) Index(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res, err := ca.CustomerService.Index(c) // Perbaikan: Gunakan `c` langsung
+	res, err := ca.CustomerService.Index(ctx)
 	if err != nil {
-		return ctx.Status(http.StatusInternalServerError).
-			JSON(dto.CreateResponeError(err.Error()))
+		return c.Status(http.StatusInternalServerError).JSON(dto.CreateResponeError(err.Error()))
 	}
-	return ctx.JSON(dto.CreateResponeSuccess(res))
+	return c.JSON(dto.CreateResponeSuccess(res))
 }

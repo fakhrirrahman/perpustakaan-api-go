@@ -21,7 +21,6 @@ func main() {
 
 	api.NewCustomerAPI(app, customerService)
 
-	app.Get("/developers", developers)
 
 	_ = app.Listen(cnf.Server.Host + ":" + cnf.Server.Port)
 }

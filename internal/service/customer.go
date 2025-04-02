@@ -2,8 +2,12 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"go-web-native/domain"
 	"go-web-native/dto"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type CustomerService struct{ CustomerRepository domain.CustomerRepository }
@@ -27,5 +31,19 @@ func (c CustomerService) Index(ctx context.Context) ([]dto.CustomerData, error) 
 		})
 	}
 	return customerData, nil
+
+}
+
+func (c CustomerService) Created(ctx context.Context, req dto.CreateCustomerRequest) error {
+	customer := domain.Customer{
+		ID:   uuid.New().String(),
+		Name: req.Name,
+		Code: req.Code,
+		CreatedAt: sql.NullTime{
+			Time:  time.Now(),
+			Valid: true,
+		},
+	}
+	return c.CustomerRepository.Save(ctx, &customer)
 
 }
