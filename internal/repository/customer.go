@@ -13,9 +13,9 @@ type CustomerRepository struct {
     db *goqu.Database
 }
 
-func NewCustomerRepository(db *sql.DB) *CustomerRepository {
+func NewCustomerRepository(db *sql.DB) domain.CustomerRepository {
 	return &CustomerRepository{
-		db: goqu.New("mysql", db),
+		db: goqu.New("default", db),
 	}
 }
 
@@ -34,16 +34,12 @@ func (cr CustomerRepository) FindByID(ctx context.Context, id string) (result do
 	return result, nil
 }
 
-
-
-// FindAll retrieves all customers from the database.
 func (cr CustomerRepository) FindAll(ctx context.Context) (result []domain.Customer, err error) {
 	dataset := cr.db.From("customers").Where(goqu.C("deleted_at").IsNull())
 	err = dataset.ScanStructsContext(ctx, &result)
 	return
 }
 
-// Save inserts a new customer into the database.
 func (cr CustomerRepository) Save(ctx context.Context, c *domain.Customer) error {
 	executor := cr.db.Insert("customers").Rows(c).Executor()
 	_, err := executor.ExecContext(ctx)

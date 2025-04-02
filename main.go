@@ -27,14 +27,19 @@ func main() {
 
 	customerRepository := repository.NewCustomerRepository(dbConnection)
 	UserRepository := repository.NewUser(dbConnection)
+	bookRepository := repository.NewBook(dbConnection)
+	BookStockRepository := repository.NewStock(dbConnection)
 
 
 	customerService := service.NewCustomerService(customerRepository)
 	authService := service.NewAuthService(cnf, UserRepository)
+	bookService := service.NewBookService(bookRepository, BookStockRepository)
+
 	
 
 	api.NewCustomerAPI(app, customerService, jwtMid)
 	api.NewAuth(app, authService)
+	api.NewBook(app, bookService, jwtMid)
 
 
 

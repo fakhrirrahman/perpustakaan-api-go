@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"go-web-native/dto"
+	"time"
 )
 
 type Customer struct {
@@ -12,7 +13,7 @@ type Customer struct {
 	Code     string `db:"code"`
 	CreatedAt sql.NullTime `db:"created_at"`
 	UpdatedAt sql.NullTime `db:"updated_at"`
-	DeletedAt sql.NullTime `db:"deleted_at"`
+	DeletedAt *time.Time `db:"deleted_at"` 
 
 }
 
