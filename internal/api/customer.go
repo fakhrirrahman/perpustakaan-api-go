@@ -15,14 +15,15 @@ type CustomerAPI struct {
 	CustomerService domain.CustomerService
 }
 
-func NewCustomerAPI(app *fiber.App, customerService domain.CustomerService){
+func NewCustomerAPI(app *fiber.App, customerService domain.CustomerService, AuzMidd fiber.Handler) {
 	ca := CustomerAPI{
 		CustomerService: customerService,
 	}
-	app.Get("/customers", ca.Index)
-	app.Post("/customers", ca.Create)
-	app.Put("/customers/:id", ca.Update)
-	app.Delete("/customers/:id", ca.Delete)
+	app.Get("/customers", AuzMidd, ca.Index)
+	app.Post("/customers", AuzMidd, ca.Create)
+	app.Put("/customers/:id", AuzMidd, ca.Update)
+	app.Delete("/customers/:id", AuzMidd, ca.Delete)
+	app.Get("/customers/:id", AuzMidd, ca.Show)
 }
 
 func (ca CustomerAPI) Index(ctx *fiber.Ctx) error {
@@ -85,4 +86,16 @@ func (ca CustomerAPI) Delete(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusInternalServerError).JSON(dto.CreateResponeError(err.Error()))
 	}
 	return ctx.SendStatus(http.StatusNoContent)
+}
+
+func (ca CustomerAPI) Show(ctx *fiber.Ctx) error {
+	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
+	defer cancel()
+
+	id := ctx.Params("id")
+	res, err := ca.CustomerService.Show(c, id)
+	if err != nil {
+		return ctx.Status(http.StatusInternalServerError).JSON(dto.CreateResponeError(err.Error()))
+	}
+	return ctx.Status(http.StatusOK).JSON(dto.CreateResponeSuccess(res))
 }
