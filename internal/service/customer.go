@@ -34,7 +34,7 @@ func (c CustomerService) Index(ctx context.Context) ([]dto.CustomerData, error) 
 
 }
 
-func (c CustomerService) Created(ctx context.Context, req dto.CreateCustomerRequest) error {
+func (c CustomerService) Create(ctx context.Context, req dto.CreateCustomerRequest) error {
 	customer := domain.Customer{
 		ID:   uuid.New().String(),
 		Name: req.Name,

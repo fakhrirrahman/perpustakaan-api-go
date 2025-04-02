@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-web-native/domain"
 	"go-web-native/dto"
+	"go-web-native/internal/util"
 	"net/http"
 	"time"
 
@@ -19,15 +20,35 @@ func NewCustomerAPI(app *fiber.App, customerService domain.CustomerService){
 		CustomerService: customerService,
 	}
 	app.Get("/customers", ca.Index)
+	app.Post("/customers", ca.Create)
 }
 
-func (ca CustomerAPI) Index(c *fiber.Ctx) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+func (ca CustomerAPI) Index(ctx *fiber.Ctx) error {
+	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
 
-	res, err := ca.CustomerService.Index(ctx)
+	res, err := ca.CustomerService.Index(c)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(dto.CreateResponeError(err.Error()))
+		return ctx.Status(http.StatusInternalServerError).JSON(dto.CreateResponeError(err.Error()))
 	}
-	return c.JSON(dto.CreateResponeSuccess(res))
+	return ctx.JSON(dto.CreateResponeSuccess(res))
+}
+
+func (ca CustomerAPI) Create(ctx *fiber.Ctx) error {
+	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
+	defer cancel()
+
+	var req dto.CreateCustomerRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return ctx.SendStatus(http.StatusUnprocessableEntity)
+	}
+	fails := util.Validate(req)
+	if len(fails) > 0 {
+		return ctx.Status(http.StatusBadRequest).JSON(dto.CreateResponeErrorData("validation error", fails))
+}
+err := ca.CustomerService.Create(c, req)
+if err != nil {
+	return ctx.Status(http.StatusInternalServerError).JSON(dto.CreateResponeError(err.Error()))
+}
+return ctx.Status(http.StatusCreated).JSON(dto.CreateResponeSuccess(""))
 }
