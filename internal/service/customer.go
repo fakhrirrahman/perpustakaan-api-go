@@ -65,3 +65,14 @@ func (c CustomerService) Update(ctx context.Context, req dto.UpdateCustomerReque
 	}
 	return c.CustomerRepository.Update(ctx, &persisted)
 }
+
+func (c CustomerService) Delete(ctx context.Context, id string) error {
+	exitst, err := c.CustomerRepository.FindByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	if exitst.ID == "" {
+		return errors.New("data customer tidak ditemukan")
+	}
+	return c.CustomerRepository.Delete(ctx, id)
+}

@@ -23,12 +23,12 @@ func NewCustomerRepository(db *sql.DB) *CustomerRepository {
 func (cr CustomerRepository) FindByID(ctx context.Context, id string) (result domain.Customer, err error) {
 	dataset := cr.db.From("customers").Where(goqu.C("id").Eq(id)).Where(goqu.C("deleted_at").IsNull())
 
-	found, err := dataset.ScanStructContext(ctx, &result) // Tangkap 2 return value
+	found, err := dataset.ScanStructContext(ctx, &result) 
 	if err != nil {
-		return domain.Customer{}, err // Jika terjadi error lain, langsung return
+		return domain.Customer{}, err 
 	}
 	if !found {
-		return domain.Customer{}, nil // Tidak ada error, tapi struct kosong
+		return domain.Customer{}, nil 
 	}
 
 	return result, nil
