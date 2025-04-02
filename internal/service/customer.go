@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"go-web-native/domain"
 	"go-web-native/dto"
 	"time"
@@ -46,4 +47,21 @@ func (c CustomerService) Create(ctx context.Context, req dto.CreateCustomerReque
 	}
 	return c.CustomerRepository.Save(ctx, &customer)
 
+}
+
+func (c CustomerService) Update(ctx context.Context, req dto.UpdateCustomerRequest) error {
+	persisted, err := c.CustomerRepository.FindByID(ctx, req.ID)
+	if err != nil {
+		return err
+	}
+	if persisted.ID == "" {
+		return errors.New("data customer tidak ditemukan")
+	}
+	persisted.Name = req.Name
+	persisted.Code = req.Code
+	persisted.UpdatedAt = sql.NullTime{
+		Time:  time.Now(),
+		Valid: true,
+	}
+	return c.CustomerRepository.Update(ctx, &persisted)
 }

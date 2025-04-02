@@ -22,9 +22,19 @@ func NewCustomerRepository(db *sql.DB) *CustomerRepository {
 // FindByID retrieves a customer by ID from the database.
 func (cr CustomerRepository) FindByID(ctx context.Context, id string) (result domain.Customer, err error) {
 	dataset := cr.db.From("customers").Where(goqu.C("id").Eq(id)).Where(goqu.C("deleted_at").IsNull())
-	err = dataset.ScanStructsContext(ctx, &result)
-	return
+
+	found, err := dataset.ScanStructContext(ctx, &result) // Tangkap 2 return value
+	if err != nil {
+		return domain.Customer{}, err // Jika terjadi error lain, langsung return
+	}
+	if !found {
+		return domain.Customer{}, nil // Tidak ada error, tapi struct kosong
+	}
+
+	return result, nil
 }
+
+
 
 // FindAll retrieves all customers from the database.
 func (cr CustomerRepository) FindAll(ctx context.Context) (result []domain.Customer, err error) {
