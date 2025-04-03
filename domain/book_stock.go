@@ -3,6 +3,12 @@ package domain
 import (
 	"context"
 	"database/sql"
+	"go-web-native/dto"
+)
+
+const (
+	BookStockAvailable = "available"
+	BookStockBorrowed  = "borrowed"
 )
 
 type BookStock struct {
@@ -20,4 +26,10 @@ type BookStockRepository interface {
 	Update(ctx context.Context, stock *BookStock) error
 	DeleteByBookId(ctx context.Context, id string) error
 	DeleteByCodes(ctx context.Context, codes []string) error
+}
+
+
+type BookStockService interface {
+	create(ctx context.Context, req dto.CreateBookRequest) error
+	delete(ctx context.Context, req dto.DeleteBookStokData) error
 }
