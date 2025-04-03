@@ -1,35 +1,44 @@
 package service
 
-import "go-web-native/domain"
+import (
+	"context"
+	"go-web-native/domain"
+	"go-web-native/dto"
+)
 
 type bookStockService struct {
-	bookRepository domain.BookRepository
+	bookRepository     domain.BookRepository
 	bookStokRepository domain.BookStockRepository
 }
 
-func NewBookStock(bookRepository domain.BookRepository, BookStockRepository domain.BookStockRepository) domain.BookStockService {
+func NewBookStock(bookRepository domain.BookRepository, bookStockRepository domain.BookStockRepository) *bookStockService {
 	return &bookStockService{
 		bookRepository:     bookRepository,
-		bookStokRepository: bookStokRepository,
+		bookStokRepository: bookStockRepository,
 	}
 }
 
-func (b bookStockService) Create(ctx context.Context, req domain.CreateBookRequest) error {
+func (b bookStockService) Create(ctx context.Context, req dto.CreateBookStokData) error {
 	books, err := b.bookRepository.FindById(ctx, req.BookId)
 	if err != nil {
 		return err
 	}
 	if books.Id == "" {
-		return errors.New("data buku tidak ditemukan")
+		return domain.BookNotFound
 	}
-	
+
 	stocks := make([]domain.BookStock, 0)
-	for i := 0; i < req.Stock; i++ {
+	for _, v := range req.Codes {
 		stocks = append(stocks, domain.BookStock{
-			Code:     v,
-			BookId:   req.BookId,
-			Status:   domain.BookStockAvailable,
+			Code:   v,
+			BookId: req.BookId,
+			Status: domain.BookStockAvailable,
 		})
 	}
-	return b.bookStokRepository.Save(ctx, stocks)
 
+	return b.bookStokRepository.Save(ctx, stocks)
+}
+
+func (b bookStockService) Delete(ctx context.Context, req dto.DeleteBookStokData) error {
+	return b.bookStokRepository.DeleteByCodes(ctx, req.Codes)
+}

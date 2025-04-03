@@ -30,6 +30,6 @@ type BookStockRepository interface {
 
 
 type BookStockService interface {
-	create(ctx context.Context, req dto.CreateBookRequest) error
-	delete(ctx context.Context, req dto.DeleteBookStokData) error
+	Create(ctx context.Context, req dto.CreateBookStokData) error
+	Delete(ctx context.Context, req dto.DeleteBookStokData) error
 }

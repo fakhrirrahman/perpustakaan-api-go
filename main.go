@@ -34,12 +34,14 @@ func main() {
 	customerService := service.NewCustomerService(customerRepository)
 	authService := service.NewAuthService(cnf, UserRepository)
 	bookService := service.NewBookService(bookRepository, BookStockRepository)
+	bookStockService := service.NewBookStock(bookRepository, BookStockRepository)
 
 	
 
 	api.NewCustomerAPI(app, customerService, jwtMid)
 	api.NewAuth(app, authService)
 	api.NewBook(app, bookService, jwtMid)
+	api.NewBookStock(app, bookStockService, jwtMid)
 
 
 

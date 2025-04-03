@@ -1,11 +1,10 @@
 package dto
 
 type CreateBookStokData struct {
-	BookId int `json:"book_id" `
-	Codes[] string `json:"codes" `
+	BookId string `json:"book_id" validate:"required"`
+	Codes []string `json:"codes" validate:"required,unique,min=1"`
 }
 
 type DeleteBookStokData struct {
-	BookId int `json:"book_id" `
 	Codes[] string `json:"codes" `
 }
