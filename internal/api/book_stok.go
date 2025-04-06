@@ -49,10 +49,13 @@ func (ba *BookStokApi) Delete(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
 
-	codes := strings.Split(ctx.Query("code"),";")
-	if len(codes) < 1 {
+	codeStr := ctx.Query("code")
+	if codeStr == "" {
 		return ctx.Status(http.StatusBadRequest).JSON(dto.CreateResponeError("parameter code wajib diisi"))
 	}
+
+	codes := strings.Split(codeStr,";")
+
 
 	err := ba.bookStockService.Delete(c, dto.DeleteBookStokData{
 		Codes: codes,

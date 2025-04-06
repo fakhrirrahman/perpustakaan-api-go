@@ -69,10 +69,9 @@ func (b BookStockRepository) DeleteByBookId(ctx context.Context, id string) erro
 }
 
 func (b BookStockRepository) DeleteByCodes(ctx context.Context, codes []string) error {
-	executor := b.db.Update("book_stocks").
+	_, err := b.db.Delete("book_stocks").
 		Where(goqu.C("code").In(codes)).
-		Executor()
-
-	_, err := executor.ExecContext(ctx)
+		Executor().
+		ExecContext(ctx)
 	return err
 }
