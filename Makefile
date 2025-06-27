@@ -58,6 +58,24 @@ migrate:
 	@echo "Migration akan berjalan otomatis saat aplikasi start (GORM AutoMigrate)"
 	@echo "$(GREEN)✓ Migration setup completed!$(NC)"
 
+## seed: Menjalankan database seeder (admin user)
+seed:
+	@echo "$(BLUE)Running database seeder...$(NC)"
+	go run cmd/seeder.go -type=admin
+	@echo "$(GREEN)✓ Seeder completed!$(NC)"
+
+## seed-all: Menjalankan semua database seeder
+seed-all:
+	@echo "$(BLUE)Running all database seeders...$(NC)"
+	go run cmd/seeder.go -type=all
+	@echo "$(GREEN)✓ All seeders completed!$(NC)"
+
+## seed-multiple: Menjalankan seeder untuk multiple admin users
+seed-multiple:
+	@echo "$(BLUE)Running multiple admin users seeder...$(NC)"
+	go run cmd/seeder.go -type=multiple
+	@echo "$(GREEN)✓ Multiple admin users seeder completed!$(NC)"
+
 ## db-reset: Reset database (hati-hati - akan menghapus semua data!)
 db-reset:
 	@echo "$(RED)WARNING: This will delete all data!$(NC)"
@@ -118,7 +136,8 @@ setup: install
 	@echo "$(BLUE)Next steps:$(NC)"
 	@echo "1. Copy .env.example to .env dan sesuaikan database config"
 	@echo "2. Pastikan MySQL sudah running"
-	@echo "3. Jalankan: $(YELLOW)make run$(NC)"
+	@echo "3. Jalankan: $(YELLOW)make seed$(NC) untuk membuat admin user"
+	@echo "4. Jalankan: $(YELLOW)make run$(NC) untuk start aplikasi"
 
 ## docker-build: Build Docker image
 docker-build:

@@ -6,7 +6,9 @@ import (
 	"go-web-native/internal/config"
 	"go-web-native/internal/connection"
 	"go-web-native/internal/repository"
+	"go-web-native/internal/seeder"
 	"go-web-native/internal/service"
+	"log"
 	"net/http"
 	"time"
 
@@ -43,6 +45,13 @@ func main() {
 	cnf := config.Get()
 	dbConnection := connection.GetDatabase(cnf.Database)
 	gormDB := connection.GetGormDatabase(cnf.Database) // Tambah GORM connection
+	
+	// Run admin seeder
+	log.Println("🌱 Running admin seeder...")
+	adminSeeder := seeder.NewAdminSeeder(gormDB)
+	if err := adminSeeder.Seed(); err != nil {
+		log.Printf("⚠️ Admin seeder failed (this is normal if admin already exists): %v", err)
+	}
 	
 	app := fiber.New(fiber.Config{
 		AppName: "Perpustakaan API v1.0",
@@ -104,9 +113,9 @@ func main() {
 		},
 	})
 
-	// Existing repositories
+	// Repositories
 	customerRepository := repository.NewCustomerRepository(dbConnection)
-	UserRepository := repository.NewUser(dbConnection)
+	UserRepository := repository.NewUser(gormDB) // Use GORM for User
 	bookRepository := repository.NewBook(dbConnection)
 	BookStockRepository := repository.NewStock(dbConnection)
 	

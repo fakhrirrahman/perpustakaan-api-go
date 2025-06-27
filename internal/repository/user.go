@@ -2,25 +2,25 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"go-web-native/domain"
 
-	"github.com/doug-martin/goqu/v9"
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {
-	db *goqu.Database
+	db *gorm.DB
 }
 
-func NewUser(con *sql.DB) domain.UserRepository {
+func NewUser(db *gorm.DB) domain.UserRepository {
 	return &UserRepository{
-		db: goqu.New("default", con),
+		db: db,
 	}
 }
 
 func (u UserRepository) FindByEmail(ctx context.Context, email string) (usr domain.User, err error) {
-	dataset := u.db.From("users").Where(goqu.C("email").Eq(email))
-
-	_, err = dataset.ScanStructContext(ctx, &usr)
-	return
-	}	
+	err = u.db.WithContext(ctx).Where("email = ?", email).First(&usr).Error
+	if err != nil {
+		return domain.User{}, err
+	}
+	return usr, nil
+}	
