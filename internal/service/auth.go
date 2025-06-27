@@ -29,7 +29,7 @@ func (a AuthService) Login(ctx context.Context, req dto.AuthData) (dto.AuthRespo
     if err != nil {
         return dto.AuthResponse{}, err
     }
-    if user.Id == "" {
+    if user.ID == "" {
         return dto.AuthResponse{}, errors.New("Authentication failed")
     }
     
@@ -41,7 +41,7 @@ func (a AuthService) Login(ctx context.Context, req dto.AuthData) (dto.AuthRespo
 
     // Generate JWT token
     claim := jwt.MapClaims{
-        "id":  user.Id,
+        "id":  user.ID,
         "exp": time.Now().Add(time.Duration(a.conf.Jwt.Exp) * time.Minute).Unix(),
     }
 
