@@ -19,13 +19,23 @@ func NewCustomerAPI(app *fiber.App, customerService domain.CustomerService, AuzM
 	ca := CustomerAPI{
 		CustomerService: customerService,
 	}
-	app.Get("/customers", AuzMidd, ca.Index)
-	app.Post("/customers", AuzMidd, ca.Create)
-	app.Put("/customers/:id", AuzMidd, ca.Update)
-	app.Delete("/customers/:id", AuzMidd, ca.Delete)
-	app.Get("/customers/:id", AuzMidd, ca.Show)
+	app.Get("/api/customers", AuzMidd, ca.Index)
+	app.Post("/api/customers", AuzMidd, ca.Create)
+	app.Put("/api/customers/:id", AuzMidd, ca.Update)
+	app.Delete("/api/customers/:id", AuzMidd, ca.Delete)
+	app.Get("/api/customers/:id", AuzMidd, ca.Show)
 }
 
+// Index godoc
+// @Summary Get all customers
+// @Description Get list of all customers
+// @Tags customers
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} dto.ResponeArrayCustomerData
+// @Failure 500 {object} dto.ResponeString
+// @Router /customers [get]
 func (ca CustomerAPI) Index(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -37,6 +47,19 @@ func (ca CustomerAPI) Index(ctx *fiber.Ctx) error {
 	return ctx.JSON(dto.CreateResponeSuccess(res))
 }
 
+// Create godoc
+// @Summary Create new customer
+// @Description Create a new customer
+// @Tags customers
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param customer body dto.CreateCustomerRequest true "Customer data"
+// @Success 201 {object} dto.ResponeString
+// @Failure 400 {object} dto.ResponeString
+// @Failure 422 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /customers [post]
 func (ca CustomerAPI) Create(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -56,6 +79,21 @@ if err != nil {
 return ctx.Status(http.StatusCreated).JSON(dto.CreateResponeSuccess(""))
 }
 
+// Update godoc
+// @Summary Update customer
+// @Description Update an existing customer
+// @Tags customers
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Customer ID"
+// @Param customer body dto.UpdateCustomerRequest true "Customer data"
+// @Success 200 {object} dto.ResponeString
+// @Failure 400 {object} dto.ResponeString
+// @Failure 404 {object} dto.ResponeString
+// @Failure 422 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /customers/{id} [put]
 func (ca CustomerAPI) Update(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -76,6 +114,19 @@ func (ca CustomerAPI) Update(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).JSON(dto.CreateResponeSuccess(""))
 }
 
+// Delete godoc
+// @Summary Delete customer
+// @Description Delete a customer by ID
+// @Tags customers
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Customer ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} dto.ResponeString
+// @Failure 404 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /customers/{id} [delete]
 func (ca CustomerAPI) Delete(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -88,6 +139,19 @@ func (ca CustomerAPI) Delete(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(http.StatusNoContent)
 }
 
+// Show godoc
+// @Summary Get customer by ID
+// @Description Get a single customer by ID
+// @Tags customers
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Customer ID"
+// @Success 200 {object} dto.ResponeCustomerData
+// @Failure 400 {object} dto.ResponeString
+// @Failure 404 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /customers/{id} [get]
 func (ca CustomerAPI) Show(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()

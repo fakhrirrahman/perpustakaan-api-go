@@ -2,11 +2,9 @@ package service
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"go-web-native/domain"
 	"go-web-native/dto"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -40,10 +38,7 @@ func (c CustomerService) Create(ctx context.Context, req dto.CreateCustomerReque
 		ID:   uuid.New().String(),
 		Name: req.Name,
 		Code: req.Code,
-		CreatedAt: sql.NullTime{
-			Time:  time.Now(),
-			Valid: true,
-		},
+		// CreatedAt akan otomatis diset oleh GORM
 	}
 	return c.CustomerRepository.Save(ctx, &customer)
 
@@ -59,10 +54,7 @@ func (c CustomerService) Update(ctx context.Context, req dto.UpdateCustomerReque
 	}
 	persisted.Name = req.Name
 	persisted.Code = req.Code
-	persisted.UpdatedAt = sql.NullTime{
-		Time:  time.Now(),
-		Valid: true,
-	}
+	// UpdatedAt akan otomatis diupdate oleh GORM
 	return c.CustomerRepository.Update(ctx, &persisted)
 }
 

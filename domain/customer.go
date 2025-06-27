@@ -2,19 +2,19 @@ package domain
 
 import (
 	"context"
-	"database/sql"
 	"go-web-native/dto"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Customer struct {
-	ID        string    `db:"id"`
-	Name      string `db:"name"`
-	Code     string `db:"code"`
-	CreatedAt sql.NullTime `db:"created_at"`
-	UpdatedAt sql.NullTime `db:"updated_at"`
-	DeletedAt *time.Time `db:"deleted_at"` 
-
+	ID        string         `json:"id" gorm:"type:varchar(36);primaryKey"`
+	Name      string         `json:"name" gorm:"type:varchar(255);not null"`
+	Code      string         `json:"code" gorm:"type:varchar(50);unique;not null"`
+	CreatedAt time.Time      `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt time.Time      `json:"updated_at" gorm:"autoUpdateTime"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 }
 
 type CustomerRepository interface {
