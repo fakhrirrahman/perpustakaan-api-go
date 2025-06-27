@@ -1,8 +1,8 @@
 package dto
 
 type Respone[T any] struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code    int    `json:"code" example:"200"`
+	Message string `json:"message" example:"Success"`
 	Data    T      `json:"data"`
 }
 
@@ -28,4 +28,41 @@ func CreateResponeSuccess[T any](data T) Respone[T] {
 		Message: "Success",
 		Data:    data,
 	}
+}
+
+// Specific response types for Swagger documentation
+type ResponeAuthResponse struct {
+	Code    int          `json:"code" example:"200"`
+	Message string       `json:"message" example:"Success"`
+	Data    AuthResponse `json:"data"`
+}
+
+type ResponeBookData struct {
+	Code    int      `json:"code" example:"200"`
+	Message string   `json:"message" example:"Success"`
+	Data    BookData `json:"data"`
+}
+
+type ResponeCustomerData struct {
+	Code    int          `json:"code" example:"200"`
+	Message string       `json:"message" example:"Success"`
+	Data    CustomerData `json:"data"`
+}
+
+type ResponeArrayBookData struct {
+	Code    int        `json:"code" example:"200"`
+	Message string     `json:"message" example:"Success"`
+	Data    []BookData `json:"data"`
+}
+
+type ResponeArrayCustomerData struct {
+	Code    int            `json:"code" example:"200"`
+	Message string         `json:"message" example:"Success"`
+	Data    []CustomerData `json:"data"`
+}
+
+type ResponeString struct {
+	Code    int    `json:"code" example:"200"`
+	Message string `json:"message" example:"Success"`
+	Data    string `json:"data"`
 }
