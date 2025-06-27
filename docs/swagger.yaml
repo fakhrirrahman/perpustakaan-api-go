@@ -1,0 +1,942 @@
+basePath: /api
+definitions:
+  dto.AuthData:
+    properties:
+      email:
+        example: admin@example.com
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.AuthResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  dto.AuthorData:
+    properties:
+      bio:
+        example: British author, best known for the Harry Potter series
+        type: string
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      email:
+        example: jk.rowling@example.com
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        example: J.K. Rowling
+        type: string
+      updated_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+    type: object
+  dto.BookData:
+    properties:
+      description:
+        example: A young wizard's journey begins at Hogwarts School of Witchcraft
+          and Wizardry
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      isbn:
+        example: 978-3-16-148410-0
+        type: string
+      title:
+        example: Harry Potter and the Philosopher's Stone
+        type: string
+    type: object
+  dto.CreateAuthorRequest:
+    properties:
+      bio:
+        example: British author, best known for the Harry Potter series
+        type: string
+      email:
+        example: jk.rowling@example.com
+        type: string
+      name:
+        example: J.K. Rowling
+        maxLength: 255
+        minLength: 2
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  dto.CreateBookRequest:
+    properties:
+      description:
+        example: A young wizard's journey begins at Hogwarts School of Witchcraft
+          and Wizardry
+        maxLength: 1000
+        minLength: 1
+        type: string
+      isbn:
+        example: 978-3-16-148410-0
+        maxLength: 17
+        minLength: 10
+        type: string
+      title:
+        example: Harry Potter and the Philosopher's Stone
+        maxLength: 255
+        minLength: 1
+        type: string
+    required:
+    - description
+    - isbn
+    - title
+    type: object
+  dto.CreateBookStokData:
+    properties:
+      book_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      codes:
+        example:
+        - '[''BOOK001'''
+        - '''BOOK002'''
+        - '''BOOK003'']'
+        items:
+          type: string
+        minItems: 1
+        type: array
+        uniqueItems: true
+    required:
+    - book_id
+    - codes
+    type: object
+  dto.CreateCustomerRequest:
+    properties:
+      code:
+        example: CUST001
+        maxLength: 50
+        minLength: 3
+        type: string
+      name:
+        example: John Doe
+        maxLength: 255
+        minLength: 2
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  dto.CustomerData:
+    properties:
+      code:
+        example: CUST001
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        example: John Doe
+        type: string
+    type: object
+  dto.Respone-array_dto_AuthorData:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/dto.AuthorData'
+        type: array
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.Respone-dto_AuthorData:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        $ref: '#/definitions/dto.AuthorData'
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.Respone-string:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        type: string
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.ResponeArrayBookData:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/dto.BookData'
+        type: array
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.ResponeArrayCustomerData:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/dto.CustomerData'
+        type: array
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.ResponeAuthResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        $ref: '#/definitions/dto.AuthResponse'
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.ResponeBookData:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        $ref: '#/definitions/dto.BookData'
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.ResponeCustomerData:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        $ref: '#/definitions/dto.CustomerData'
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.ResponeString:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        type: string
+      message:
+        example: Success
+        type: string
+    type: object
+  dto.UpdateAuthorRequest:
+    properties:
+      bio:
+        example: British author, best known for the Harry Potter series
+        type: string
+      email:
+        example: jk.rowling@example.com
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        example: J.K. Rowling
+        maxLength: 255
+        minLength: 2
+        type: string
+    required:
+    - email
+    - id
+    - name
+    type: object
+  dto.UpdateBookRequest:
+    properties:
+      description:
+        example: A young wizard's journey begins at Hogwarts School of Witchcraft
+          and Wizardry
+        maxLength: 1000
+        minLength: 1
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      isbn:
+        example: 978-3-16-148410-0
+        maxLength: 17
+        minLength: 10
+        type: string
+      title:
+        example: Harry Potter and the Philosopher's Stone
+        maxLength: 255
+        minLength: 1
+        type: string
+    required:
+    - description
+    - isbn
+    - title
+    type: object
+  dto.UpdateCustomerRequest:
+    properties:
+      code:
+        example: CUST001
+        maxLength: 50
+        minLength: 3
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      name:
+        example: John Doe
+        maxLength: 255
+        minLength: 2
+        type: string
+    required:
+    - code
+    - name
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API untuk sistem manajemen perpustakaan
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Perpustakaan API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and get access token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AuthData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeAuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      summary: User login
+      tags:
+      - authentication
+  /authors:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all authors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Respone-array_dto_AuthorData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+      summary: Get all authors
+      tags:
+      - authors
+    post:
+      consumes:
+      - application/json
+      description: Create a new author
+      parameters:
+      - description: Author data
+        in: body
+        name: author
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAuthorRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+      security:
+      - BearerAuth: []
+      summary: Create new author
+      tags:
+      - authors
+  /authors/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an author by ID
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+      security:
+      - BearerAuth: []
+      summary: Delete author
+      tags:
+      - authors
+    get:
+      consumes:
+      - application/json
+      description: Get a single author by ID
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Respone-dto_AuthorData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+      summary: Get author by ID
+      tags:
+      - authors
+    put:
+      consumes:
+      - application/json
+      description: Update an existing author
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Author data
+        in: body
+        name: author
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateAuthorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Respone-string'
+      security:
+      - BearerAuth: []
+      summary: Update author
+      tags:
+      - authors
+  /book-stocks:
+    delete:
+      consumes:
+      - application/json
+      description: Delete multiple book stock entries by codes
+      parameters:
+      - description: Semicolon separated codes
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Delete book stock entries
+      tags:
+      - book-stocks
+    post:
+      consumes:
+      - application/json
+      description: Create multiple book stock entries for a book
+      parameters:
+      - description: Book stock data
+        in: body
+        name: book_stock
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBookStokData'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Create book stock entries
+      tags:
+      - book-stocks
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeArrayBookData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Get all books
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Create a new book
+      parameters:
+      - description: Book data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Create new book
+      tags:
+      - books
+  /books/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Delete book
+      tags:
+      - books
+    get:
+      consumes:
+      - application/json
+      description: Get a single book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeBookData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Get book by ID
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      description: Update an existing book
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Book data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Update book
+      tags:
+      - books
+  /customers:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all customers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeArrayCustomerData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Get all customers
+      tags:
+      - customers
+    post:
+      consumes:
+      - application/json
+      description: Create a new customer
+      parameters:
+      - description: Customer data
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Create new customer
+      tags:
+      - customers
+  /customers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a customer by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Delete customer
+      tags:
+      - customers
+    get:
+      consumes:
+      - application/json
+      description: Get a single customer by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeCustomerData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Get customer by ID
+      tags:
+      - customers
+    put:
+      consumes:
+      - application/json
+      description: Update an existing customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Customer data
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ResponeString'
+      security:
+      - BearerAuth: []
+      summary: Update customer
+      tags:
+      - customers
+securityDefinitions:
+  BearerAuth:
+    description: Bearer token for authentication
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
