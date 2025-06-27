@@ -1,0 +1,83 @@
+### Authors API Testing
+
+# Get All Authors
+GET http://localhost:8080/api/authors
+Content-Type: application/json
+
+###
+
+# Get Author by ID
+GET http://localhost:8080/api/authors/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+###
+
+# Create New Author (Need JWT Token)
+POST http://localhost:8080/api/authors
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "name": "J.K. Rowling",
+  "email": "jk.rowling@example.com",
+  "bio": "British author, best known for the Harry Potter series of fantasy novels"
+}
+
+###
+
+# Update Author (Need JWT Token)
+PUT http://localhost:8080/api/authors/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "name": "J.K. Rowling Updated",
+  "email": "jk.rowling.updated@example.com",
+  "bio": "Updated biography of the famous British author"
+}
+
+###
+
+# Delete Author (Need JWT Token)
+DELETE http://localhost:8080/api/authors/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+###
+
+# Test Cases for Validation
+
+# Create Author with Invalid Email
+POST http://localhost:8080/api/authors
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "name": "Test Author",
+  "email": "invalid-email",
+  "bio": "Test bio"
+}
+
+###
+
+# Create Author with Missing Required Fields
+POST http://localhost:8080/api/authors
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "bio": "Test bio only"
+}
+
+###
+
+# Create Author with Too Short Name
+POST http://localhost:8080/api/authors
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "name": "A",
+  "email": "short@example.com",
+  "bio": "Test bio"
+}
