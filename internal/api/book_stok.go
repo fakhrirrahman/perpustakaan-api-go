@@ -19,12 +19,24 @@ type BookStokApi struct {
 func NewBookStock(app *fiber.App, bookStockService domain.BookStockService, authMidd fiber.Handler) {
 	bookStokApi := &BookStokApi{
 		bookStockService: bookStockService,
-
 	}
-	app.Post("/book-stocks", authMidd, bookStokApi.Create)
-	app.Delete("/book-stocks", authMidd, bookStokApi.Delete)
+	app.Post("/api/book-stocks", authMidd, bookStokApi.Create)
+	app.Delete("/api/book-stocks", authMidd, bookStokApi.Delete)
 }
 
+// Create godoc
+// @Summary Create book stock entries
+// @Description Create multiple book stock entries for a book
+// @Tags book-stocks
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param book_stock body dto.CreateBookStokData true "Book stock data"
+// @Success 201 {object} dto.ResponeString
+// @Failure 400 {object} dto.ResponeString
+// @Failure 422 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /book-stocks [post]
 func (ba *BookStokApi) Create(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -45,6 +57,18 @@ func (ba *BookStokApi) Create(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusCreated).JSON(dto.CreateResponeSuccess(""))
 	
 }
+// Delete godoc
+// @Summary Delete book stock entries
+// @Description Delete multiple book stock entries by codes
+// @Tags book-stocks
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param code query string true "Semicolon separated codes" example:"BOOK001;BOOK002;BOOK003"
+// @Success 200 {object} dto.ResponeString
+// @Failure 400 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /book-stocks [delete]
 func (ba *BookStokApi) Delete(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()

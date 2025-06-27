@@ -23,7 +23,7 @@ func (b bookStockService) Create(ctx context.Context, req dto.CreateBookStokData
 	if err != nil {
 		return err
 	}
-	if books.Id == "" {
+	if books.ID == "" {
 		return domain.BookNotFound
 	}
 
@@ -31,7 +31,7 @@ func (b bookStockService) Create(ctx context.Context, req dto.CreateBookStokData
 	for _, v := range req.Codes {
 		stocks = append(stocks, domain.BookStock{
 			Code:   v,
-			BookId: req.BookId,
+			BookID: req.BookId,
 			Status: domain.BookStockAvailable,
 		})
 	}
