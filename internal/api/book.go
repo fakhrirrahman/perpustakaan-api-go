@@ -19,13 +19,23 @@ func NewBook(app *fiber.App, bookService domain.BookService, authMidd fiber.Hand
 	bookAPI := &BookAPI{
 		bookService: bookService,
 	}
-	app.Get("/books", authMidd,bookAPI.Index)
-	app.Get("/books/:id", authMidd, bookAPI.Show)
-	app.Post("/books", authMidd, bookAPI.Create)
-	app.Put("/books/:id", authMidd, bookAPI.Update)
-	app.Delete("/books/:id", authMidd, bookAPI.Delete)
+	app.Get("/api/books", authMidd, bookAPI.Index)
+	app.Get("/api/books/:id", authMidd, bookAPI.Show)
+	app.Post("/api/books", authMidd, bookAPI.Create)
+	app.Put("/api/books/:id", authMidd, bookAPI.Update)
+	app.Delete("/api/books/:id", authMidd, bookAPI.Delete)
 }
 
+// Index godoc
+// @Summary Get all books
+// @Description Get list of all books
+// @Tags books
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} dto.ResponeArrayBookData
+// @Failure 500 {object} dto.ResponeString
+// @Router /books [get]
 func (b BookAPI) Index(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -36,6 +46,19 @@ func (b BookAPI) Index(ctx *fiber.Ctx) error {
 	}
 	return ctx.Status(fiber.StatusOK).JSON(dto.CreateResponeSuccess(res))
 }
+// Create godoc
+// @Summary Create new book
+// @Description Create a new book
+// @Tags books
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param book body dto.CreateBookRequest true "Book data"
+// @Success 201 {object} dto.ResponeString
+// @Failure 400 {object} dto.ResponeString
+// @Failure 422 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /books [post]
 func (b BookAPI) Create(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -56,6 +79,19 @@ func (b BookAPI) Create(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(dto.CreateResponeSuccess(""))
 }
 
+// Show godoc
+// @Summary Get book by ID
+// @Description Get a single book by ID
+// @Tags books
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Book ID"
+// @Success 200 {object} dto.ResponeBookData
+// @Failure 400 {object} dto.ResponeString
+// @Failure 404 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /books/{id} [get]
 func (b BookAPI) Show(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -68,6 +104,21 @@ func (b BookAPI) Show(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(dto.CreateResponeSuccess(res))
 }
 
+// Update godoc
+// @Summary Update book
+// @Description Update an existing book
+// @Tags books
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Book ID"
+// @Param book body dto.UpdateBookRequest true "Book data"
+// @Success 200 {object} dto.ResponeString
+// @Failure 400 {object} dto.ResponeString
+// @Failure 404 {object} dto.ResponeString
+// @Failure 422 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /books/{id} [put]
 func (b BookAPI) Update(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()
@@ -86,6 +137,19 @@ func (b BookAPI) Update(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(dto.CreateResponeSuccess(""))
 }
 
+// Delete godoc
+// @Summary Delete book
+// @Description Delete a book by ID
+// @Tags books
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Book ID"
+// @Success 200 {object} dto.ResponeString
+// @Failure 400 {object} dto.ResponeString
+// @Failure 404 {object} dto.ResponeString
+// @Failure 500 {object} dto.ResponeString
+// @Router /books/{id} [delete]
 func (b BookAPI) Delete(ctx *fiber.Ctx) error {
 	c, cancel := context.WithTimeout(ctx.Context(), 10*time.Second)
 	defer cancel()

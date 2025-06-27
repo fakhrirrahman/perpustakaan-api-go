@@ -2,11 +2,9 @@ package service
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"go-web-native/domain"
 	"go-web-native/dto"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -31,8 +29,8 @@ func (b bookService) Index(ctx context.Context) ([]dto.BookData, error) {
 	var data []dto.BookData
 	for _, v := range result {
 		data = append(data, dto.BookData{
-			Id: v.Id,
-			Isbn: v.Isbn,
+			Id: v.ID,
+			Isbn: v.ISBN,
 			Title: v.Title,
 			Description: v.Description,
 
@@ -46,12 +44,12 @@ func (b bookService) Show(ctx context.Context, id string) (dto.BookData, error) 
 	if err != nil {
 		return dto.BookData{}, err
 	}
-	if data.Id == "" {
+	if data.ID == "" {
 		return dto.BookData{}, errors.New("data book tidak ditemukan")
 	}
 	return dto.BookData{
-		Id: data.Id,
-		Isbn: data.Isbn,
+		Id: data.ID,
+		Isbn: data.ISBN,
 		Title: data.Title,
 		Description: data.Description,
 	}, nil
@@ -59,14 +57,10 @@ func (b bookService) Show(ctx context.Context, id string) (dto.BookData, error) 
 
 func (b bookService) Create(ctx context.Context, req dto.CreateBookRequest) error {
 	book := domain.Book{
-		Id: uuid.NewString(),
-		Isbn: req.Isbn,
+		ID: uuid.NewString(),
+		ISBN: req.Isbn,
 		Title: req.Title,
 		Description: req.Description,
-		CreatedAt: sql.NullTime{
-			Time:  time.Now(),
-			Valid: true,
-		},
 	}
 	return b.bookRepository.Save(ctx, &book)
 }
@@ -76,16 +70,13 @@ func (b bookService) Update(ctx context.Context, req dto.UpdateBookRequest) erro
 	if err != nil {
 		return err
 	}
-	if persisted.Id == "" {
+	if persisted.ID == "" {
 		return errors.New("data book tidak ditemukan")
 	}
-	persisted.Isbn = req.Isbn
+	persisted.ISBN = req.Isbn
 	persisted.Title = req.Title
 	persisted.Description = req.Description
-	persisted.UpdatedAt = sql.NullTime{
-		Time:  time.Now(),
-		Valid: true,
-	}
+	// UpdatedAt akan otomatis diupdate oleh GORM
 	return b.bookRepository.Update(ctx, &persisted)
 }
 
@@ -94,13 +85,13 @@ func (b bookService) Delete(ctx context.Context, id string) error {
 	if err != nil {
 		return err
 	}
-	if exitst.Id == "" {
+	if exitst.ID == "" {
 		return errors.New("data book tidak ditemukan")
 	}
-	err = b.bookRepository.Delete(ctx, exitst.Id)
+	err = b.bookRepository.Delete(ctx, exitst.ID)
 	if err != nil {
 		return err
 		
 	}
-	return b.bookStockRepository.DeleteByBookId(ctx, exitst.Id)
+	return b.bookStockRepository.DeleteByBookId(ctx, exitst.ID)
 }

@@ -2,18 +2,20 @@ package domain
 
 import (
 	"context"
-	"database/sql"
 	"go-web-native/dto"
+	"time"
+
+	"gorm.io/gorm"
 )
 
 type Book struct {
-	Id 	  string    `db:"id"`
-	Isbn   string    `db:"isbn"`
-	Title   string `db:"title"`
-	Description string `db:"description"`
-	CreatedAt sql.NullTime `db:"created_at"`
-	UpdatedAt sql.NullTime `db:"updated_at"`
-	DeletedAt sql.NullTime `db:"deleted_at"`
+	ID          string         `json:"id" gorm:"type:varchar(36);primaryKey"`
+	ISBN        string         `json:"isbn" gorm:"type:varchar(20);unique;not null"`
+	Title       string         `json:"title" gorm:"type:varchar(255);not null"`
+	Description string         `json:"description" gorm:"type:text"`
+	CreatedAt   time.Time      `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt   time.Time      `json:"updated_at" gorm:"autoUpdateTime"`
+	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 }
 
 type BookRepository interface {

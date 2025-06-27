@@ -42,7 +42,7 @@ func (b bookRepository) Save(ctx context.Context, book *domain.Book) error {
 }
 
 func (b bookRepository) Update(ctx context.Context, book *domain.Book) error {
-	executor := b.db.Update("books").Set(book).Where(goqu.C("id").Eq(book.Id)).Executor() 
+	executor := b.db.Update("books").Set(book).Where(goqu.C("id").Eq(book.ID)).Executor() 
 	_, err := executor.ExecContext(ctx)
 	return err
 }
